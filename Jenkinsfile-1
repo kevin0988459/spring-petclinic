@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh './mvnw clean compile'
+               sh './mvnw package'
             }
         }
         stage('scan') {
@@ -11,6 +11,11 @@ pipeline {
                 withSonarQubeEnv(installationName: 'sonar'){
                   sh './mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
                 }
+            }
+        }
+        stage('Run') {
+            steps {
+                sh 'java -jar target/*.jar &'
             }
         }
     }
