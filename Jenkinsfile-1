@@ -15,7 +15,9 @@ pipeline {
         }
         stage('Run') {
             steps {
-                sh 'java -jar target/*.jar &'
+                script {
+                    sh "nohup java -jar target/*.jar > output.log 2>&1 &"
+                }
             }
         }
     }
