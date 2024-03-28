@@ -15,8 +15,8 @@ pipeline {
         }
         stage('Run') {
             steps {
-                script {
-                    sh "nohup java -jar target/*.jar > output.log 2>&1 &"
+                withEnv(['JENKINS_NODE_COOKIE=dontkill']) {
+                    sh "nohup java -jar target/*.jar &"
                 }
             }
         }
