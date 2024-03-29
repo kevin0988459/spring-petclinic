@@ -1,15 +1,32 @@
 pipeline {
     agent any
-    stages {
+stages {
+        // 抓取專案
+        stage('git clone') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/kevin0988459/spring-petclinic.git'
+            }  
+            post {
+                // git clone 失敗
+                failure {
+                    echo "[*] git clone failure"
+                }
+                // git clone 成功
+                success {
+                    echo '[*] git clone successful'
+                }
+            }
+        }
         stage('Build') {
             steps {
-               sh './mvnw package'
+                 sh './mvnw package'
             }
         }
         stage('scan') {
             steps {
                 withSonarQubeEnv(installationName: 'sonar'){
-                  sh './mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+                sh './mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
                 }
             }
         }
